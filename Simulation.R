@@ -1,10 +1,6 @@
 ############################################################
-############################################################
-### Scenario 2
-### Spatially varying coefficients
-### Optimal bandwidth
+### Simulation
 ### Mina Kim
-############################################################
 ############################################################
 
 library(MASS)
@@ -38,6 +34,9 @@ for (r in 1:rr) {
   m <- c(seq(1.5,max(dist.mat2),0.5))
   wt.c1 <- wt.c2 <-c()
   k=1
+
+####################################################################
+### Optimal bandwidth
   
   for (i in m) {
     print(paste("r =",r,",","i =",i))
@@ -70,29 +69,21 @@ for (r in 1:rr) {
       m2 <- coxph(Surv(estop, estatus == 2)~X1beta21 + X2beta22,
                   data=tmp[idx,], init=c(1,1), control=coxph.control(iter.max=0))
       return(data.frame(m1=m1$loglik[2], m2=m2$loglik[2]))
-      
     }
-    
     wt.c1[k] = sum(m.cvpl$m1)
     wt.c2[k] = sum(m.cvpl$m2)
     k=k+1
   }
-  
   opt1=m[which(wt.c1==max(wt.c1))]
   opt2=m[which(wt.c2==max(wt.c2))]
   
   optimal.bw <- rbind(optimal.m,c(r,opt1,opt2))
-  
-  
 }
-
 names(optimal.bw) <- c("iter","bw1","bw2")
 
 
-
-
 ####################################################################
-### Spatially varying coefficients
+### Spatially varying coefficients & summary
 
 data.all <- foreach(rr = 1:1000,.combine=rbind,.packages=c("doParallel","dplyr","survival")) %dopar% {
   
