@@ -1,4 +1,5 @@
 ############################################################
+### Geographcally-weighted-competing-risk-regression-GWCRR
 ### Simulation
 ### Mina Kim
 ############################################################
